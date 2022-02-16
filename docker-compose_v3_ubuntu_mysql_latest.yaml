@@ -56,57 +56,6 @@ services:
    com.zabbix.dbtype: "mysql"
    com.zabbix.os: "ubuntu"
 
- zabbix-proxy-mysql:
-  image: zabbix/zabbix-proxy-mysql:ubuntu-5.4-latest
-  profiles:
-   - all
-  ports:
-   - "10071:10051"
-  volumes:
-   - /etc/localtime:/etc/localtime:ro
-   - ./zbx_env/usr/lib/zabbix/externalscripts:/usr/lib/zabbix/externalscripts:ro
-   - ./zbx_env/var/lib/zabbix/modules:/var/lib/zabbix/modules:ro
-   - ./zbx_env/var/lib/zabbix/enc:/var/lib/zabbix/enc:ro
-   - ./zbx_env/var/lib/zabbix/ssh_keys:/var/lib/zabbix/ssh_keys:ro
-   - ./zbx_env/var/lib/zabbix/mibs:/var/lib/zabbix/mibs:ro
-  ulimits:
-   nproc: 65535
-   nofile:
-    soft: 20000
-    hard: 40000
-  deploy:
-   resources:
-    limits:
-      cpus: '0.70'
-      memory: 512M
-    reservations:
-      cpus: '0.3'
-      memory: 256M
-  env_file:
-   - ./env_vars/.env_db_mysql_proxy
-   - ./env_vars/.env_prx
-   - ./env_vars/.env_prx_mysql
-  depends_on:
-   - mysql-server
-  secrets:
-   - MYSQL_USER
-   - MYSQL_PASSWORD
-   - MYSQL_ROOT_PASSWORD
-  networks:
-   zbx_net_backend:
-    aliases:
-     - zabbix-proxy-mysql
-     - zabbix-proxy-ubuntu-mysql
-     - zabbix-proxy-mysql-ubuntu
-   zbx_net_frontend:
-  stop_grace_period: 30s
-  labels:
-   com.zabbix.description: "Zabbix proxy with MySQL database support"
-   com.zabbix.company: "Zabbix LLC"
-   com.zabbix.component: "zabbix-proxy"
-   com.zabbix.dbtype: "mysql"
-   com.zabbix.os: "ubuntu"
-
  zabbix-web-apache-mysql:
   image: zabbix/zabbix-web-apache-mysql:ubuntu-5.4-latest
   profiles:
